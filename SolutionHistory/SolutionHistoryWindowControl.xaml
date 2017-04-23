@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="SolutionHistory.SolutionHistoryWindowControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             Background="{DynamicResource VsBrush.Window}"
+             Foreground="{DynamicResource VsBrush.WindowText}"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300"
+             Name="MyToolWindow">
+    <Grid >
+        <DockPanel >
+            <StackPanel DockPanel.Dock="Top" Margin="0,5" Orientation="Horizontal" Background="WhiteSmoke">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label>Author:</Label>
+                        <TextBox x:Name="author" Width="150px" Margin="5,0"></TextBox>
+                        <Button Content="View History" Click="ViewHistory_Click" />
+                    </StackPanel>
+                    <ProgressBar x:Name="ProgressBar" Margin="0,3" Maximum="100"></ProgressBar>
+                </StackPanel>
+            </StackPanel>
+            <DataGrid x:Name="dgHistory" IsReadOnly="True" AutoGenerateColumns="False" >
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Changeset}" Header="Changeset"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding User}" Header="User"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Date, StringFormat='{}{0:G}'}" Header="Date"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Project}" Header="Project"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Comment}" Header="Comment"></DataGridTextColumn>
+                </DataGrid.Columns>
+                <DataGrid.ItemContainerStyle>
+                    <Style TargetType="DataGridRow">
+                        <EventSetter Event="MouseDoubleClick" Handler="Changeset_DoubleClick"/>
+                    </Style>
+                </DataGrid.ItemContainerStyle>
+            </DataGrid>
+        </DockPanel>
+    </Grid>
+</UserControl>
