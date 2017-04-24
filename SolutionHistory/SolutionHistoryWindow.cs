@@ -21,7 +21,7 @@ namespace SolutionHistory
     /// implementation of the IVsUIElementPane interface.
     /// </para>
     /// </remarks>
-    [Guid("d4c1ae38-8a0c-466a-8b39-a0ec4409ebb0")]
+    [Guid("d0d1b02a-91db-4e9f-91f3-e81e9b1b8c59")]
     public class SolutionHistoryWindow : ToolWindowPane
     {
         /// <summary>
@@ -29,7 +29,7 @@ namespace SolutionHistory
         /// </summary>
         public SolutionHistoryWindow() : base(null)
         {
-            this.Caption = "Solution History";
+            this.Caption = "SolutionHistoryWindow";
 
             // This is the user control hosted by the tool window; Note that, even if this class implements IDisposable,
             // we are not calling Dispose on this object. This is because ToolWindowPane calls Dispose on

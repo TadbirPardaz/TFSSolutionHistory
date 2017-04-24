@@ -4,11 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.TeamFoundation.SourceControl.WebApi;
 using Microsoft.TeamFoundation.VersionControl.Client;
@@ -19,9 +20,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 namespace SolutionHistory
 {
-    using System;
     using System.Diagnostics.CodeAnalysis;
-    using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Controls;
 
@@ -30,8 +29,6 @@ namespace SolutionHistory
     /// </summary>
     public partial class SolutionHistoryWindowControl : UserControl
     {
-        private TfvcHttpClient client;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="SolutionHistoryWindowControl"/> class.
         /// </summary>
@@ -41,6 +38,7 @@ namespace SolutionHistory
         }
 
 
+
         private async void ViewHistory_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -48,7 +46,7 @@ namespace SolutionHistory
                 var data = await GetSolutionHistory();
                 dgHistory.ItemsSource = data;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 dgHistory.ItemsSource = null;
 
@@ -59,7 +57,7 @@ namespace SolutionHistory
                     OLEMSGICON.OLEMSGICON_INFO,
                     OLEMSGBUTTON.OLEMSGBUTTON_OK,
                     OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-                    }
+            }
         }
 
         public async Task<IEnumerable<HistoryItem>> GetSolutionHistory()

@@ -46,7 +46,7 @@ namespace SolutionHistory
         /// <summary>
         /// SolutionHistoryWindowPackage GUID string.
         /// </summary>
-        public const string PackageGuidString = "e6425ccb-c37c-43cf-92ea-dc7f888a2e14";
+        public const string PackageGuidString = "6530bbf9-7c79-49a0-9023-cf63fa367446";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SolutionHistoryWindow"/> class.

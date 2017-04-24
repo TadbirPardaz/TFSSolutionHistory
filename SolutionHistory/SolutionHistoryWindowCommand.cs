@@ -25,7 +25,7 @@ namespace SolutionHistory
         /// <summary>
         /// Command menu group (command set GUID).
         /// </summary>
-        public static readonly Guid CommandSet = new Guid("9a3a0a05-210e-4383-9e62-7cf8ab7d3ab2");
+        public static readonly Guid CommandSet = new Guid("59bfc25f-cf8e-405a-8b24-7cabeed45e42");
 
         /// <summary>
         /// VS Package that provides this command, not null.
