@@ -160,7 +160,7 @@ namespace SolutionHistory
         public string ConvertToItemPath(WorkspaceInfo wsp, string path)
         {
             string root = wsp.MappedPaths.First(x => path.StartsWith(x));
-            return "$/" +Path.GetFileName(root)+ path.Replace(root, "").Replace("\\", "/");
+            return "$/" + path.Replace(root, "").Replace("\\", "/");
         }
 
         public class HistoryItem
