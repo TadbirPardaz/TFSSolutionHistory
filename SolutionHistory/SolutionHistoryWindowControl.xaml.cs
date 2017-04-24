@@ -97,7 +97,7 @@ namespace SolutionHistory
             {
                 var searchParam = new TfvcChangesetSearchCriteria()
                 {
-                    ItemPath = ConvertToItemPath(wi.MappedPaths[0], Path.GetDirectoryName(project)),
+                    ItemPath = ConvertToItemPath(wi, Path.GetDirectoryName(project)),
                     Author = string.IsNullOrWhiteSpace(author.Text) ? null : author.Text
                 };
                 var history = await ss.GetChangesetsAsync(searchCriteria: searchParam, maxChangeCount: 10);
@@ -157,9 +157,10 @@ namespace SolutionHistory
             return await ss.GetChangesetAsync(id);
         }
 
-        public string ConvertToItemPath(string root, string path)
+        public string ConvertToItemPath(WorkspaceInfo wsp, string path)
         {
-            return "$" + path.Replace(root, "").Replace("\\", "/");
+            string root = wsp.MappedPaths.First(x => path.StartsWith(x));
+            return "$/" +Path.GetFileName(root)+ path.Replace(root, "").Replace("\\", "/");
         }
 
         public class HistoryItem
