@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Microsoft.TeamFoundation.Client;
 using Microsoft.TeamFoundation.SourceControl.WebApi;
 using Microsoft.TeamFoundation.VersionControl.Client;
 using Microsoft.VisualStudio.Services.Client;
@@ -159,8 +160,10 @@ namespace SolutionHistory
 
         public string ConvertToItemPath(WorkspaceInfo wsp, string path)
         {
-            string root = wsp.MappedPaths.First(x => path.StartsWith(x));
-            return "$/" + path.Replace(root, "").Replace("\\", "/");
+            var workspace = wsp.GetWorkspace(new TfsTeamProjectCollection(wsp.ServerUri));
+            //string root = wsp.MappedPaths.First(x => path.StartsWith(x));
+            //return "$/" + path.Replace(root, "").Replace("\\", "/");
+            return workspace.GetServerItemForLocalItem(path);
         }
 
         public class HistoryItem
