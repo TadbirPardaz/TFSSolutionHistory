@@ -17,6 +17,7 @@ using Microsoft.VisualStudio.Services.Client;
 using Microsoft.VisualStudio.Services.Common;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using SolutionHistory.Models;
 
 namespace SolutionHistory
 {
@@ -161,15 +162,6 @@ namespace SolutionHistory
         {
             string root = wsp.MappedPaths.First(x => path.StartsWith(x));
             return "$/" + path.Replace(root, "").Replace("\\", "/");
-        }
-
-        public class HistoryItem
-        {
-            public string User { get; set; }
-            public int Changeset { get; set; }
-            public string Comment { get; set; }
-            public DateTime Date { get; internal set; }
-            public string Project { get; set; }
         }
 
         private async void Changeset_DoubleClick(object sender, MouseButtonEventArgs e)
