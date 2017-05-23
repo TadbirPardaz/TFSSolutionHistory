@@ -9,9 +9,13 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using EnvDTE;
+using EnvDTE80;
 using Microsoft.TeamFoundation.Client;
+using Microsoft.TeamFoundation.Controls;
 using Microsoft.TeamFoundation.SourceControl.WebApi;
 using Microsoft.TeamFoundation.VersionControl.Client;
 using Microsoft.VisualStudio.Services.Client;
@@ -31,6 +35,8 @@ namespace SolutionHistory
     /// </summary>
     public partial class SolutionHistoryWindowControl : UserControl
     {
+        ViewChangesetMode viewChangeset = ViewChangesetMode.Web;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SolutionHistoryWindowControl"/> class.
         /// </summary>
@@ -79,10 +85,8 @@ namespace SolutionHistory
 
             var dte = Package.GetGlobalService(typeof(EnvDTE.DTE)) as EnvDTE.DTE;
 
-            object slnAddress;
-            sln.GetProperty((int)__VSPROPID.VSPROPID_SolutionFileName, out slnAddress);
 
-            WorkspaceInfo wi = Workstation.Current.GetLocalWorkspaceInfo(slnAddress.ToString());
+            WorkspaceInfo wi = GetCurrentWorkspace();
 
             var collectionUri = wi.ServerUri;
 
@@ -129,6 +133,16 @@ namespace SolutionHistory
             return list.GroupBy(x => x.Changeset).Select(x => x.First()).OrderByDescending(x => x.Changeset);
         }
 
+        private WorkspaceInfo GetCurrentWorkspace()
+        {
+            var sln = ServiceProvider.GlobalProvider.GetService(typeof(IVsSolution)) as IVsSolution;
+
+            object slnAddress;
+            sln.GetProperty((int)__VSPROPID.VSPROPID_SolutionFileName, out slnAddress);
+
+            return Workstation.Current.GetLocalWorkspaceInfo(slnAddress.ToString());
+        }
+
         public async Task<TfvcChangeset> GetChangesetWebUrl(int id)
         {
             var sln = ServiceProvider.GlobalProvider.GetService(typeof(IVsSolution)) as IVsSolution;
@@ -171,11 +185,56 @@ namespace SolutionHistory
         {
             var historyItem = (sender as DataGridRow).DataContext as HistoryItem;
 
-            var changeset = await GetChangesetWebUrl(historyItem.Changeset);
+            Func<int, System.Threading.Tasks.Task> viewChangesetFunc = ViewChangesetDetails_Web;
+
+            switch (viewChangeset)
+            {
+                case ViewChangesetMode.TeamExplorer:
+                    viewChangesetFunc = ViewChangesetDetails_TeamExplorer;
+                    break;
+                case ViewChangesetMode.Popup:
+                    viewChangesetFunc = ViewChangesetDetails_Popup;
+                    break;
+                case ViewChangesetMode.Web:
+                    viewChangesetFunc = ViewChangesetDetails_Web;
+                    break;
+            }
+
+            await viewChangesetFunc(historyItem.Changeset);
+        }
+
+        #region View Changeset Implementations
+        private async System.Threading.Tasks.Task ViewChangesetDetails_Web(int changesetId)
+        {
+            var changeset = await GetChangesetWebUrl(changesetId);
 
             var link = changeset.Links.Links["web"] as Microsoft.VisualStudio.Services.WebApi.ReferenceLink;
 
             System.Diagnostics.Process.Start(link.Href);
         }
+
+        private async System.Threading.Tasks.Task ViewChangesetDetails_Popup(int changesetId)
+        {
+            DTE2 dte = (DTE2)Package.GetGlobalService(typeof(DTE));
+
+            var vce = dte.DTE.GetObject("Microsoft.VisualStudio.TeamFoundation.VersionControl.VersionControlExt");
+
+            var methodInfo = vce.GetType().GetMethod("ViewChangesetDetails", BindingFlags.Instance | BindingFlags.Public);
+            methodInfo.Invoke(vce, new object[] { changesetId });
+
+            await System.Threading.Tasks.Task.CompletedTask;
+        }
+
+        private async System.Threading.Tasks.Task ViewChangesetDetails_TeamExplorer(int changesetId)
+        {
+            ITeamExplorer teamExplorer = ServiceProvider.GlobalProvider.GetService(typeof(ITeamExplorer)) as ITeamExplorer;
+            if (teamExplorer != null)
+            {
+                teamExplorer.NavigateToPage(new Guid(TeamExplorerPageIds.ChangesetDetails), changesetId);
+            }
+            await System.Threading.Tasks.Task.CompletedTask;
+        }
+        #endregion
+
     }
 }
