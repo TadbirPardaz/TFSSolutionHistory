@@ -8,6 +8,8 @@ The exisiting `View History` context menu in Visual Studio will only show those 
 
 TFSSolutionHistory will get all the projects history and combine them altogether.
 
+![image](https://user-images.githubusercontent.com/4930000/29249752-febdbc46-804a-11e7-89c7-3ce3b2660e31.png)
+
 ## Features
 * User filter
 
