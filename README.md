@@ -1,6 +1,6 @@
 # TFS Solution History
 
-`View Complete Solution History by a single click`
+View Complete **Solution History** by a single click
 
 # The Problem
 
