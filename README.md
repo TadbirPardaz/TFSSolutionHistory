@@ -27,16 +27,16 @@ We came up with the idea to write a VS extension to fill this gap by enumerating
 You can install it in Visual Studio 2015 & 2017.
 
 ## Steps to Use:
-•	Install the extension
-•	Ensure you have a solution opened in VS
-•	Click View -> Other Windows -> View Solution History
+*	Install the extension
+* Ensure you have a solution opened in VS
+*	Click View -> Other Windows -> View Solution History
 
 ## Features
-•	Author filter: enter full name of author or the user name
-•	Double Click to open changeset details in TFS Web access
+*	Author filter: enter full name of author or the user name
+*	Double Click to open changeset details in TFS Web access
 
 ## Limitations
-•	At the moment, the extension fetches only 10 recent history items for any given project.
+*	At the moment, the extension fetches only 10 recent history items for any given project.
 
 TFSSolutionHistory will get all the projects history and combine them altogether.
 
